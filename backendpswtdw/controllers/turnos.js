@@ -99,6 +99,14 @@ router.get("/", async (req, res) => {
       const inicioDia = new Date(dataStr + "T00:00:00.000Z");
       const fimDia = new Date(dataStr + "T23:59:59.999Z");
       filtro.data = { $gte: inicioDia, $lte: fimDia };
+    } else if (req.query.dataInicio || req.query.dataFim) {
+      filtro.data = {};
+      if (req.query.dataInicio) {
+        filtro.data.$gte = new Date(String(req.query.dataInicio) + "T00:00:00.000Z");
+      }
+      if (req.query.dataFim) {
+        filtro.data.$lte = new Date(String(req.query.dataFim) + "T23:59:59.999Z");
+      }
     }
 
     const turnos = await Turno.find(filtro)
